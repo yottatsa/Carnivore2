@@ -2287,7 +2287,7 @@ Fpr02a:	ld	c,_RBREAD
 ;	call	WRTSLT
 
 	call	FBProg2
-	jp	c,PR_Fail
+	jp	c,PR_GFail
 	ld	e,">"			; flashing indicator
 	call	PrintSym
 	ld	a,(PreBnk)
@@ -2371,8 +2371,16 @@ LIF04:
 	pop	af
 	ret
 
+PR_GFail:
+	push	de	
+	ld	de,FL_gerr
+	jr	PR_F_C
 PR_Fail:
-	print	FL_erd_S
+	push	de	
+	ld	de,FL_erd_S
+PR_F_C:
+	call	PrintMsg
+	pop	de
 	scf				; set carry flag because of an error
 	jr	LIF04
 
@@ -8034,6 +8042,8 @@ FL_er_S:
 	db	13,10,"Writing into FlashROM failed!",13,10,"$"
 FL_erd_S:
 	db	13,10,"Writing directory entry failed!",13,10,"$"
+FL_gerr:
+	db	13,10,"General write failure!",13,10,"$"
 CRD_S:	db	"Directory Editor - Press [ESC] to exit",10,13
 	db	"Use [UP] or [DOWN] to select an entry",10,13
 	db	"Use [LEFT] or [RIGHT] to flip pages",10,13
