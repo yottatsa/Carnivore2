@@ -2461,26 +2461,36 @@ FBProg2:
         ld      h,#80
         call    ENASLT 
 	ld	hl,#8AAA
-;	ld	de,#8555
+	ld	de,#8555
 	exx
-	ld	de,#8000
+;	ld	de,#8000
 	di
 Loop2:
 	exx
-	ld	(hl),#50		; double byte programm
+	ld	(hl),#AA		; (AAA)<-AA
+	ld	a,#55		
+	ld	(de),a			; (555)<-55
+	ld	(hl),#A0		; (AAA)<-A0
 	exx
 	ld	a,(hl)
-	ld	(de),a			; 1st byte programm
-	inc	hl
-	inc	de
-	ld	a,(hl)			; 2nd byte programm
-	ld	(de),a
+	ld	(de),a			; byte programm
 	call	CHECK			; check
+;Loop2:
+;	exx
+;	ld	(hl),#50		; double byte programm
+;	exx
+;	ld	a,(hl)
+;	ld	(de),a			; 1st byte programm
+;	inc	hl
+;	inc	de
+;	ld	a,(hl)			; 2nd byte programm
+;	ld	(de),a
+;	call	CHECK			; check
 	jp	c,PrEr
 	inc	hl
 	inc	de
 	dec	bc
-	dec	bc
+	;dec	bc
 	ld	a,b
 	or	c
 	jr	nz,Loop2
@@ -6553,13 +6563,15 @@ BCTSF:
 	ld	a,(#4000)
 	ld	(Det00),a		; Manufacturer Code 
 	ld	a,(#4002)
-	ld	(Det02),a		; Device Code C1
+	ld	(Det02),a		; Device ID / Code C1
+	ld	a,(#4006)
+	ld	(Det06),a		; Extended Memory Block Verify Code
+
+	; extended data
 	ld	a,(#401C)
 	ld	(Det1C),a		; Device Code C2
 	ld	a,(#401E)
 	ld	(Det1E),a		; Device Code C3
-	ld	a,(#4006)
-	ld	(Det06),a		; Extended Memory Block Verify Code
 
 	ld	a,#F0
 	ld	(#4000),a		; Autoselect Mode OFF
