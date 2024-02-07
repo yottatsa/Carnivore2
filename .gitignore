@@ -48,3 +48,6 @@ Temporary Items
 
 # as80 listings
 *.lst
+
+# vim
+*.swp

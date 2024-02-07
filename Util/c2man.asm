@@ -6609,7 +6609,11 @@ Trp02:	call	HEXOUT
 
 Trp02a:	ld	a,(Det00)
 	cp	#20
+	jp	z,Trp02b
+	cp	#C2
+	jp	z,Trp02c
 	jp	nz,Trp03	
+Trp02b:
 	ld	a,(Det02)
 	cp	#7E
 	jp	nz,Trp03
@@ -6621,6 +6625,12 @@ Trp02a:	ld	a,(Det00)
 	cp	#10
 	jr	z,Trp08
 	jr	Trp04			; M29W640Gx
+Trp02c:
+	ld	a,(Det02)
+	cp	#CB
+	jp	nz,Trp03
+	print	MX29LV640EB			; print full model number MX29LV640EB
+	jr	Trp04b
 Trp05:	ld	a,(Det1E)
 	cp	#01
 	jr	z,Trp06
@@ -6642,6 +6652,7 @@ Trp09:	ld	e,"T"			; M29W640GT
 Trp10:	ld	e,"B"			; M29W640GB
 Trp04:
 	call	PrintSym
+Trp04b:
 	print	ONE_NL_S
 
 	ld	a,(Det06)
@@ -7622,6 +7633,8 @@ Shad_F:	db	"FAILED!",10,13,"$"
 
 M29W640:
         db      "FlashROM chip detected: M29W640G$"
+MX29LV640EB:
+        db      "FlashROM chip detected: MX29LV640EB$"
 NOTD_S:	db	13,10,"FlashROM chip's type is not detected!",13,10
 	db	"This cartridge is not open for writing or may be defective!",13,10
 	db	"Try to reboot and hold down F5 key...",13,10 
